@@ -11,6 +11,10 @@ djangorestframework = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
 markdown = "*"
+serializers = "*"
+django-debug-toolbar = "*"
+celery = "*"
+redis = "*"
 
 [dev-packages]
 
