@@ -4,6 +4,8 @@ import logging
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -30,6 +32,10 @@ class CodeViewSet(ModelViewSet):
     queryset = Code.objects.filter(status='active').select_related('category')
     permission_classes = [IsAuthenticated]
     pagination_class = DefaultPagination
+
+    @method_decorator(cache_page(60 * 5))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:

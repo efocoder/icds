@@ -7,7 +7,8 @@ echo "Starting Migrations..."
 python3 manage.py migrate
 echo ====================================
 
-echo "Running seed..."
+echo "Adding Categories..."
+python3 codes/load_data.py
 echo ====================================
 
 echo "Starting Server..."
