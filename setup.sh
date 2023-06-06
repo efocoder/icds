@@ -9,6 +9,7 @@ echo ====================================
 
 echo "Adding data..."
 python3 codes/load_data.py
+echo "Data added..."
 echo ====================================
 
 echo "Starting Server..."
