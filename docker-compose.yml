@@ -12,7 +12,9 @@ services:
       - .env
     depends_on:
       - db
+      - redis
     restart: always
+    command: ./setup.sh
 
 
   db:
@@ -25,6 +27,28 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    env_file:
+      - .env
+
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A diagnosis worker -l INFO
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+      - app
 
 volumes:
   pgdata:

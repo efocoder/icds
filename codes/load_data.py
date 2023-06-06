@@ -12,6 +12,7 @@ sys.path.append(BASE_DIR.as_posix())
 django.setup()
 
 from codes.models import Category
+from djoser.serializers import UserCreateSerializer
 
 logger = logging.getLogger('django')
 
@@ -30,4 +31,16 @@ def load_categories():
         logger.error(e)
 
 
-load_categories()
+def create_test_user():
+    logger.info('creating test user...')
+    user = UserCreateSerializer(data={'email': 'testemail@mail.com', 'username': 'testuser', 'password': 'pas12345'})
+    if user.is_valid(raise_exception=True):
+        user.save()
+
+
+def main():
+    load_categories()
+    create_test_user()
+
+
+main()

@@ -1,5 +1,7 @@
 import csv
 import logging
+import os
+
 from celery import shared_task
 
 from pathlib import Path

@@ -1,11 +1,7 @@
-import csv
-import json
 import logging
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -33,9 +29,8 @@ class CodeViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     pagination_class = DefaultPagination
 
-    @method_decorator(cache_page(60 * 5))
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    # def list(self, request, *args, **kwargs):
+    #     return super().list(request, *args, **kwargs)
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
@@ -52,15 +47,18 @@ class CodeViewSet(ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def upload_data(self, request):
-
         fs = FileSystemStorage(location='tmp/')
         file = request.FILES.get('file')
-        content = ContentFile(file.read())
-        filename = fs.save('_tmp_code.csv', content)
+        filename = file.__dict__['_name']
 
         if file is None:
             raise ValidationError({'file': 'This field is required'})
 
+        if not filename.endswith('.csv'):
+            raise ValidationError({'file': 'Upload a valid csv file'})
+
+        content = ContentFile(file.read())
+        fs.save(filename, content)
         create_bulk_codes.delay(data={'filename': filename})
 
         return Response({'msg': 'Processing request.'}, status=status.HTTP_200_OK)

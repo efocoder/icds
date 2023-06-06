@@ -7,7 +7,7 @@ echo "Starting Migrations..."
 python3 manage.py migrate
 echo ====================================
 
-echo "Adding Categories..."
+echo "Adding data..."
 python3 codes/load_data.py
 echo ====================================
 

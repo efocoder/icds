@@ -16,7 +16,7 @@ class Category(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['id']
 
 
 class Code(models.Model):
@@ -25,10 +25,10 @@ class Code(models.Model):
     abbrev_desc = models.CharField(max_length=255)
     full_desc = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
-    status = models.CharField(max_length=10, choices=STATUSES)
+    status = models.CharField(max_length=10, choices=STATUSES, default='active')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['id']
         unique_together = ['category', 'full_code']

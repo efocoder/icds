@@ -15,4 +15,4 @@ EXPOSE 8000
 
 RUN chmod u+x setup.sh
 
-ENTRYPOINT ["/app/setup.sh"]
+#ENTRYPOINT ["/app/setup.sh"]
