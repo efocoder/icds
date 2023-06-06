@@ -121,6 +121,8 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 LOGGING = {
     'version': 1,
     'loggers': {

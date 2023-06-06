@@ -59,6 +59,7 @@ class CodeViewSet(ModelViewSet):
 
         content = ContentFile(file.read())
         fs.save(filename, content)
-        create_bulk_codes.delay(data={'filename': filename})
+
+        create_bulk_codes.delay(data={'filename': filename, 'user_email': request.user.email})
 
         return Response({'msg': 'Processing request.'}, status=status.HTTP_200_OK)

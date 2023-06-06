@@ -8,6 +8,8 @@ from pathlib import Path
 import sys
 import django
 
+from utils.email_service import send_email
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(BASE_DIR.as_posix())
 django.setup()
@@ -34,5 +36,7 @@ def create_bulk_codes(data):
                      full_code=full_code, abbrev_desc=abbrev_desc, full_desc=full_desc, status='active'))
 
         Code.objects.bulk_create(code_list)
+        send_email(data['user_email'], codes=code_list)
     except Exception as e:
+        send_email(data['user_email'], 'failed', error=e)
         logger.error(e)
